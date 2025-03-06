@@ -18622,7 +18622,7 @@
     </script>
     <script>
 document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("loginForm"); // Ensure it matches your form ID
+    const form = document.getElementById("loginForm");
 
     if (form) {
         form.addEventListener("submit", async function (event) {
@@ -18639,19 +18639,28 @@ document.addEventListener("DOMContentLoaded", function () {
             const username = usernameInput.value;
             const password = passwordInput.value;
 
-            const response = await fetch("https://igbe.onrender.com/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password })
-            });
+            try {
+                const response = await fetch("https://igbe.onrender.com/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
 
-            const result = await response.json();
-            alert(result.message || result.error);
+                // Check if response has content before trying to parse JSON
+                if (response.status !== 204) {
+                    const result = await response.json();
+                    console.log("Server response:", result);
+                } 
+
+            } catch (error) {
+                console.error("Registration failed", error);
+            }
         });
     } else {
         console.error("Form with ID 'loginForm' not found.");
     }
 });
+
 
    </script>
 
